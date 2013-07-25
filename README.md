@@ -1,8 +1,16 @@
 zabbix-nginx-stats
 ==================
 
-Simple access log parsing for zabbix (tested with nginx). - written in perl and a wrapper bash script.
+Simple script to import basic nginx statistics into zabbix. It parses the log file (currently only supports one basic format) and pushes the data into zabbix. It is written in perl with a small bash wrapper script which uses logtail.
 
+Synced values include (all since last execution):
+
+* Request Count
+* Request count by status code
+* Request Time: Average, Mean, Median, 90%, 80% and 25% lines
+* Upstream Response Time (Same as Request Time)
+
+The default zabbix template has preconfigured triggers to warn on 5 errors (status code 500, 503 and 403) and graphs for request time and request count by status.
 
 Installation/Configuration:
 ----------------
@@ -10,6 +18,7 @@ Installation/Configuration:
 ### checkout from github
 ### install dependencies
 
+* logtail2 (debian: apt-get install logtail)
 * Perl
 * Statistics::Descriptive, Date::Parse and File::Temp
     * for debian: install packages libstatistics-descriptive-perl libtimedate-perl
