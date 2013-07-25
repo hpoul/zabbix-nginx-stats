@@ -11,7 +11,7 @@
 use strict;
 
 my $DEBUG = 1;
-my $DRYRUN = 1;
+my $DRYRUN = 0;
 my $ZABBIX_SENDER = '/usr/bin/zabbix_sender';
 my $ZABBIX_CONF = '/etc/zabbix/zabbix_agentd.conf';
 # MAXAGE is the maximum age of log entries to process, all older lines are ignored
@@ -31,6 +31,8 @@ my $parseerrors = 0;
 my $request_time_total = 0;
 my $upstream_time_total = 0;
 my $statuscount = {
+	'301' => 0,
+	'302' => 0,
 	'200' => 0,
 	'404' => 0,
 	'403' => 0,
@@ -109,7 +111,7 @@ sub sendstat {
   my ($key, $value, $cfg) = @_;
 
   my $hostparam = defined $cfg->{host} ? ' -s "'.$cfg->{host}.'" ':'';
-  print $datafh (defined $cfg->{host} ? $cfg->{host} : '-') . " $key $value\n";
+  print $datafh (defined $cfg->{host} ? $cfg->{host} : '-') . " nginx[$key] $value\n";
   
   #my $cmd = "$ZABBIX_SENDER $hostparam -c $ZABBIX_CONF -k \"nginx[$key]\" -o \"$value\" >/dev/null";
   #if ($DEBUG) {
@@ -158,7 +160,7 @@ foreach my $cfg (@$CONFIG) {
 }
 
 
-my $cmd = "$ZABBIX_SENDER -c $ZABBIX_CONF -i " . $datafh->filename();
+my $cmd = "$ZABBIX_SENDER -vv -c $ZABBIX_CONF -i " . $datafh->filename() . " 2>&1";
 print $cmd."\n";
 system "cp ".$datafh->filename()." /tmp/test.txt";
 system $cmd unless $DRYRUN;
