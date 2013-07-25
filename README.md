@@ -1,13 +1,19 @@
 zabbix-nginx-stats
 ==================
 
-Simple access log parsing for zabbix (tested with nginx).
+Simple access log parsing for zabbix (tested with nginx). - written in perl and a wrapper bash script.
 
 
-Usage:
+Installation/Configuration:
 ----------------
 
 ### checkout from github
+### install dependencies
+
+* Perl
+* Statistics::Descriptive, Date::Parse and File::Temp
+    * for debian: install packages libstatistics-descriptive-perl libtimedate-perl
+
 ### configure logfile output:
 
          log_format timed_combined '$remote_addr $host $remote_user [$time_local]  '
