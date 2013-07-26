@@ -9,6 +9,7 @@ Synced values include (all since last execution):
 * Request count by status code
 * Request Time: Average, Mean, Median, 90%, 80% and 25% lines
 * Upstream Response Time (Same as Request Time)
+* Body Bytes Sent: Average, Sum
 
 The default zabbix template has preconfigured triggers to warn on 5 errors (status code 500, 503 and 403) and graphs for request time and request count by status.
 
