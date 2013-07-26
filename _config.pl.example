@@ -1,0 +1,27 @@
+# Rename this file to _config.pl to customize behavior.
+# if you don't define a config file the default is used: $config = [ {} ]; 
+# which means that all access log entries will be submitted to the
+# default zabbix host as specified in the config file.
+
+$CONFIG = [
+  {
+    # example to filter out all paths starting with /zabbix
+    filter => sub { !($_[0]->{path} =~ m|^/zabbix|); },
+  },
+  {
+    # example to submit all access log entries for worktrail.net to another zabbix host.
+    host=> 'worktrail.net',
+    filter => sub { $_[0]->{hostname} eq 'worktrail.net'; },
+  },
+];
+
+
+$DEBUG = 1;
+$DRYRUN = 0;
+$ZABBIX_SENDER = '/usr/bin/zabbix_sender';
+$ZABBIX_CONF = '/etc/zabbix/zabbix_agentd.conf';
+# MAXAGE is the maximum age of log entries to process, all older lines are ignored
+# Since this script is meant to be run every 10 minutes, make sure we don't process more logfile lines.
+$MAXAGE = (2+10)*60*60;
+
+

@@ -9,21 +9,39 @@
 # apt-get install libstatistics-descriptive-perl libtimedate-perl
 
 use strict;
+use File::Basename;
+use Statistics::Descriptive;
+use Date::Parse;
+use File::Temp ();
 
-my $DEBUG = 1;
-my $DRYRUN = 0;
-my $ZABBIX_SENDER = '/usr/bin/zabbix_sender';
-my $ZABBIX_CONF = '/etc/zabbix/zabbix_agentd.conf';
+
+use lib dirname($0);
+
+our $DEBUG = 1;
+our $DRYRUN = 0;
+our $ZABBIX_SENDER = '/usr/bin/zabbix_sender';
+our $ZABBIX_CONF = '/etc/zabbix/zabbix_agentd.conf';
 # MAXAGE is the maximum age of log entries to process, all older lines are ignored
 # Since this script is meant to be run every 10 minutes, make sure we don't process more logfile lines.
-my $MAXAGE = (2+10)*60*60;
+our $MAXAGE = (2+10)*60*60;
 
-my $CONFIG = [
-  {
-    #'filter' => sub { return $_[1] =~ /zabbix/; };
-    filter => sub { !($_[0]->{path} =~ m|^/zabbix|); },
-  }
+our $CONFIG = [
+  {},
 ];
+
+eval "require '_config.pl'";
+
+# example _config.pl file:
+#[
+#  {
+#    #'filter' => sub { return $_[1] =~ /zabbix/; };
+#    filter => sub { !($_[0]->{path} =~ m|^/zabbix|); },
+#  },
+#  {
+#    host=> 'worktrail.net',
+#    filter => sub { $_[0]->{hostname} eq 'worktrail.net'; },
+#  },
+#];
 
 my $reqcount = 0;
 my $oldcount = 0;
@@ -42,9 +60,6 @@ my $statuscount = {
 	'other' => 0,
 };
 
-use Statistics::Descriptive;
-use Date::Parse;
-use File::Temp ();
 
 my $datafh = File::Temp->new();
 print "tmpfile: " . $datafh->filename . "\n";
@@ -54,6 +69,7 @@ for my $cfg (@$CONFIG) {
   push(@$results, {
     s_request_time => Statistics::Descriptive::Full->new(),
     s_upstream_time => Statistics::Descriptive::Full->new(),
+    body_bytes_sent => Statistics::Descriptive::Full->new(),
     statuscount => \%$statuscount,
     oldcount => 0,
     reqcount => 0,
@@ -100,6 +116,7 @@ my $l = $_;
       if (defined $upstream_response_time && $upstream_response_time ne '-') {
         $r->{s_upstream_time}->add_data(int($upstream_response_time*1000));
       }
+      $r->{body_bytes_sent}->add_data($body_bytes_sent);
       $r->{reqcount} += 1;
     }
   } else {
@@ -142,8 +159,17 @@ sub printstats {
   sendstatpercentile("${prefix}_percentile", $obj, 80, $cfg);
   sendstatpercentile("${prefix}_percentile", $obj, 90, $cfg);
   sendstatint("${prefix}_median", $obj->median(), $cfg);
+  sendstatint("${prefix}_sum", $obj->sum(), $cfg);
 }
-
+sub printbytestats {
+  my ($obj, $prefix, $cfg) = @_;
+  if ($obj->count() == 0) {
+    return;
+  }
+  sendstatint("${prefix}_avg", $obj->sum()/$obj->count(), $cfg);
+  #sendstat("${prefix}_count", $obj->count(), $cfg);
+  sendstatint("${prefix}_sum", $obj->sum(), $cfg);
+}
 
 my $j = 0;
 foreach my $cfg (@$CONFIG) {
@@ -153,6 +179,7 @@ foreach my $cfg (@$CONFIG) {
   sendstat('ignored', $r->{ignored}, $cfg);
   printstats($r->{s_request_time}, 'request_time', $cfg);
   printstats($r->{s_upstream_time}, 'upstream_time', $cfg);
+  printbytestats($r->{body_bytes_sent}, 'body_bytes_sent', $cfg);
   sendstat("parseerrors", $parseerrors, $cfg);
   for my $status (keys %{$r->{statuscount}}) {
     sendstat("status_$status", $statuscount->{$status}, $cfg);
