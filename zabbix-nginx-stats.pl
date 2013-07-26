@@ -21,6 +21,7 @@ our $DEBUG = 1;
 our $DRYRUN = 0;
 our $ZABBIX_SENDER = '/usr/bin/zabbix_sender';
 our $ZABBIX_CONF = '/etc/zabbix/zabbix_agentd.conf';
+our $SLOW_ACCESS_MIN = 1000;
 # MAXAGE is the maximum age of log entries to process, all older lines are ignored
 # Since this script is meant to be run every 10 minutes, make sure we don't process more logfile lines.
 our $MAXAGE = (2+10)*60*60;
@@ -112,12 +113,16 @@ my $l = $_;
         $r->{oldcount} += 1;
       }
       $r->{statuscount}->{defined $r->{statuscount}->{$status} ? $status : 'other'} += 1;
-      $r->{s_request_time}->add_data(int($request_time*1000));
+      my $reqms = int($request_time*1000);
+      $r->{s_request_time}->add_data($reqms);
       if (defined $upstream_response_time && $upstream_response_time ne '-') {
         $r->{s_upstream_time}->add_data(int($upstream_response_time*1000));
       }
       $r->{body_bytes_sent}->add_data($body_bytes_sent);
       $r->{reqcount} += 1;
+      if ($reqms > $SLOW_ACCESS_MIN) {
+        print "WARN SLOWREQ: $reqms: $_\n";
+      }
     }
   } else {
     $parseerrors += 1;
