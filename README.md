@@ -29,6 +29,8 @@ Installation/Configuration:
          log_format timed_combined '$remote_addr $host $remote_user [$time_local]  '
                     '"$request" $status $body_bytes_sent '
                     '"$http_referer" "$http_user_agent" $request_time $upstream_response_time $pipe';
+                    
+         access_log /var/log/nginx/access.log timed_combined;
 
 ### Import template zbx_template_nginx.xml
 ### configure crontab to run every 10 minutes:
