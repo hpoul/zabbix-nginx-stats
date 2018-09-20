@@ -1488,7 +1488,7 @@
             <ymax_item_1>0</ymax_item_1>
             <graph_items>
                 <graph_item>
-                    <sortorder>9</sortorder>
+                    <sortorder>10</sortorder>
                     <drawtype>0</drawtype>
                     <color>00CC00</color>
                     <yaxisside>0</yaxisside>
@@ -1500,7 +1500,7 @@
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>8</sortorder>
+                    <sortorder>9</sortorder>
                     <drawtype>0</drawtype>
                     <color>C8C8C8</color>
                     <yaxisside>0</yaxisside>
@@ -1512,7 +1512,7 @@
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>7</sortorder>
+                    <sortorder>8</sortorder>
                     <drawtype>0</drawtype>
                     <color>DDDDDD</color>
                     <yaxisside>0</yaxisside>
@@ -1524,7 +1524,7 @@
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>6</sortorder>
+                    <sortorder>7</sortorder>
                     <drawtype>0</drawtype>
                     <color>CC0000</color>
                     <yaxisside>0</yaxisside>
@@ -1536,7 +1536,7 @@
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>5</sortorder>
+                    <sortorder>6</sortorder>
                     <drawtype>0</drawtype>
                     <color>0000C8</color>
                     <yaxisside>0</yaxisside>
@@ -1548,7 +1548,7 @@
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>4</sortorder>
+                    <sortorder>5</sortorder>
                     <drawtype>0</drawtype>
                     <color>770000</color>
                     <yaxisside>0</yaxisside>
@@ -1560,7 +1560,7 @@
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>3</sortorder>
+                    <sortorder>4</sortorder>
                     <drawtype>0</drawtype>
                     <color>770000</color>
                     <yaxisside>0</yaxisside>
@@ -1572,7 +1572,7 @@
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>2</sortorder>
+                    <sortorder>3</sortorder>
                     <drawtype>0</drawtype>
                     <color>770000</color>
                     <yaxisside>0</yaxisside>
@@ -1584,7 +1584,7 @@
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>1</sortorder>
+                    <sortorder>2</sortorder>
                     <drawtype>0</drawtype>
                     <color>C800C8</color>
                     <yaxisside>0</yaxisside>
@@ -1596,7 +1596,7 @@
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>0</sortorder>
+                    <sortorder>1</sortorder>
                     <drawtype>0</drawtype>
                     <color>C800C8</color>
                     <yaxisside>0</yaxisside>
@@ -1608,7 +1608,7 @@
                     </item>
                 </graph_item>
                 <graph_item>
-                    <sortorder>5</sortorder>
+                    <sortorder>0</sortorder>
                     <drawtype>0</drawtype>
                     <color>00C8C8</color>
                     <yaxisside>0</yaxisside>
