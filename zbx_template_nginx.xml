@@ -1458,7 +1458,7 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{Nginx:nginx[status_500].last(0)} +  {Nginx:nginx[status_503].last(0)} + {Nginx:nginx[status_403].last(0)}&gt;4</expression>
+            <expression>{Nginx:nginx[status_500].last(0)} + {Nginx:nginx[status_501].last(0)} + {Nginx:nginx[status_502].last(0)} + {Nginx:nginx[status_503].last(0)} + {Nginx:nginx[status_504].last(0)}&gt;4</expression>
             <name>Too many errors: 500, 503 and 403</name>
             <url/>
             <status>0</status>
